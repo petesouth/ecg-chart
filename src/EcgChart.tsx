@@ -46,11 +46,8 @@ export default function EcgChart() {
             
         }
 
-        ctx.strokeStyle = "black"
-        ctx.fillRect(x, data[x], 1, 1)
-        
-        ctx.fillStyle = "white"
-        ctx.fillRect(x + 1, data[x + 1], 1, 1)
+        ctx.fillStyle = "white";
+        ctx.fillRect(x + 1, 0, 5, canvas.height)
         
         ctx.strokeStyle = "black"
         ctx.lineTo(x, data[x]);

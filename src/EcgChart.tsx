@@ -38,7 +38,30 @@ export default function EcgChart(props: EcgChartProps) {
     let interval: any = null;
 
 
-    const animate = (canvas: any, ctx: any) => {
+    const drawGrid = (ctx:any) => {
+        let s = props.width / 50;
+        let pL = 0
+        let pT = 0
+        let pR = 0
+        let pB = 0
+        
+        ctx.beginPath()
+        ctx.strokeStyle = 'lightgrey'
+        ctx.lineWidth = 1;
+            
+        for (var x = pL; x <= props.width - pR; x += s) {
+           ctx.moveTo(x, pT)
+           ctx.lineTo(x, props.height - pB)
+        }
+        for (var y = pT; y <= props.height - pB; y += s) {
+           ctx.moveTo(pL, y)
+           ctx.lineTo(props.width - pR, y)
+        }
+        ctx.stroke()
+     }
+                                 
+
+    const drawChart = (ctx: any) => {
 
         if (continueAnimation === false) {
             x = 0;
@@ -49,20 +72,24 @@ export default function EcgChart(props: EcgChartProps) {
             x = 0;
         }
 
-        if (x === 0) {
-            ctx.lineWidth = 1;
-            ctx.moveTo(x, data[x]);
-            ctx.beginPath();
-        }
+        ctx.beginPath();
+        ctx.strokeStyle = 'blue'
 
-        ctx.fillStyle = "white";
-        ctx.fillRect(x + 1, 0, 5, canvas.height)
-
+        ctx.moveTo(0, data[0]);
+        ctx.lineWidth = 4;
         ctx.strokeStyle = props.chartcolor;
-        ctx.lineTo(x, data[x]);
+            
+        for( let ix = 0; ix <= x; ++ix ) {
+            ctx.lineTo(ix, data[ix]);        
+        }    
         ctx.stroke();
         x += 1;
     }
+
+    const animate = (ctx:any) => {
+        drawGrid(ctx);
+        drawChart(ctx);
+    }   
 
 
     useEffect(() => {
@@ -72,7 +99,7 @@ export default function EcgChart(props: EcgChartProps) {
         ctx.beginPath();
             
         interval = setInterval(() => {
-            animate(canvas, ctx);
+            animate(ctx);
         }, 100);
     }, [])
 
@@ -80,7 +107,9 @@ export default function EcgChart(props: EcgChartProps) {
     return (<Container key={uuidv4()}>
         <Row>
             <Col>
-                <canvas style={{ background: "white", border: "solid 1px black" }} width={props.width} height={props.height} id={canvasId} key={canvasId} ref={canvasRef} onResize={()=>{
+                <canvas style={{ background: "white", 
+                                 border: "lightgrey 1px solid",
+                                 position: "relative"}} width={props.width} height={props.height} id={canvasId} key={canvasId} ref={canvasRef} onResize={()=>{
 
                 }}/>
             </Col>
@@ -105,7 +134,7 @@ export default function EcgChart(props: EcgChartProps) {
                                     const canvas: any = canvasRef.current;
                                     const ctx: any = canvas.getContext('2d');
                                     interval = setInterval(() => {
-                                        animate(canvas, ctx);
+                                        animate(ctx);
                                     }, 100);
                                 }}>Start</Button>
                         </Col>

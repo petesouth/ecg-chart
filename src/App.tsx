@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <EcgChart />
+        <EcgChart chartcolor={'blue'} height={250} width={800} />
       </header>
     </div>
   );

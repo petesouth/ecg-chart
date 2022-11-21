@@ -38,7 +38,7 @@ export default function EcgChart(props: EcgChartProps) {
     let interval: any = null;
 
     const drawOuterGrid = (ctx:any) => {
-        let s = props.width / 5;
+        let s = props.width / 10;
         let pL = 0
         let pT = 0
         let pR = 0

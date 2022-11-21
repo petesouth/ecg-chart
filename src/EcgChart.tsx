@@ -27,7 +27,7 @@ export default function EcgChart(props: EcgChartProps) {
     const data: number[] = [];
 
     // TESTING: fill data with some test values
-    for (var i = 0; i < 500; i++) {
+    for (var i = 0; i < props.width; i++) {
         data.push(Math.sin(i / 10) * 70 + 100);
     }
 
@@ -42,13 +42,11 @@ export default function EcgChart(props: EcgChartProps) {
 
         if (continueAnimation === false) {
             x = 0;
-            ctx.beginPath();
             return;
         }
 
         if (x >= data.length - 1) {
             x = 0;
-            ctx.beginPath();
         }
 
         if (x === 0) {
@@ -60,11 +58,9 @@ export default function EcgChart(props: EcgChartProps) {
         ctx.fillStyle = "white";
         ctx.fillRect(x + 1, 0, 5, canvas.height)
 
-        ctx.strokeStyle = "black"
+        ctx.strokeStyle = props.chartcolor;
         ctx.lineTo(x, data[x]);
         ctx.stroke();
-
-
         x += 1;
     }
 
@@ -73,7 +69,8 @@ export default function EcgChart(props: EcgChartProps) {
         const canvas: any = canvasRef.current
         const ctx: any = canvas.getContext('2d')
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+        ctx.beginPath();
+            
         interval = setInterval(() => {
             animate(canvas, ctx);
         }, 100);

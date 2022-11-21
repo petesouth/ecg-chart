@@ -26,6 +26,7 @@ export default function EcgChart(props: EcgChartProps) {
     const canvasRef = useRef(null);
     const data: number[] = [];
 
+
     // TESTING: fill data with some test values
     for (var i = 0; i < props.width; i++) {
         data.push(Math.sin(i / 10) * 70 + 100);
@@ -38,7 +39,6 @@ export default function EcgChart(props: EcgChartProps) {
 
 
     const animate = (canvas: any, ctx: any) => {
-        console.log("x", x, data[x])
 
         if (continueAnimation === false) {
             x = 0;
@@ -52,7 +52,7 @@ export default function EcgChart(props: EcgChartProps) {
         if (x === 0) {
             ctx.lineWidth = 1;
             ctx.moveTo(x, data[x]);
-
+            ctx.beginPath();
         }
 
         ctx.fillStyle = "white";
@@ -80,7 +80,9 @@ export default function EcgChart(props: EcgChartProps) {
     return (<Container key={uuidv4()}>
         <Row>
             <Col>
-                <canvas style={{ background: "white", border: "solid 1px black" }} width={props.width} height={props.height} id={canvasId} key={canvasId} ref={canvasRef} />
+                <canvas style={{ background: "white", border: "solid 1px black" }} width={props.width} height={props.height} id={canvasId} key={canvasId} ref={canvasRef} onResize={()=>{
+
+                }}/>
             </Col>
         </Row>
         <Row>

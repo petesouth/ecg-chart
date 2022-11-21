@@ -37,8 +37,30 @@ export default function EcgChart(props: EcgChartProps) {
     let continueAnimation = true;
     let interval: any = null;
 
+    const drawOuterGrid = (ctx:any) => {
+        let s = props.width / 5;
+        let pL = 0
+        let pT = 0
+        let pR = 0
+        let pB = 0
+        
+        ctx.beginPath()
+        ctx.strokeStyle = 'darkgrey'
+        ctx.lineWidth = 1;
+            
+        for (var x = pL; x <= props.width - pR; x += s) {
+           ctx.moveTo(x, pT)
+           ctx.lineTo(x, props.height - pB)
+        }
+        for (var y = pT; y <= props.height - pB; y += s) {
+           ctx.moveTo(pL, y)
+           ctx.lineTo(props.width - pR, y)
+        }
+        ctx.stroke()
+    }
+    
 
-    const drawGrid = (ctx:any) => {
+    const drawInnerGrid = (ctx:any) => {
         let s = props.width / 50;
         let pL = 0
         let pT = 0
@@ -58,7 +80,7 @@ export default function EcgChart(props: EcgChartProps) {
            ctx.lineTo(props.width - pR, y)
         }
         ctx.stroke()
-     }
+    }
                                  
 
     const drawChart = (ctx: any) => {
@@ -87,7 +109,10 @@ export default function EcgChart(props: EcgChartProps) {
     }
 
     const animate = (ctx:any) => {
-        drawGrid(ctx);
+        if( !interval ) return;
+
+        drawInnerGrid(ctx);
+        drawOuterGrid(ctx);
         drawChart(ctx);
     }   
 
@@ -128,9 +153,6 @@ export default function EcgChart(props: EcgChartProps) {
                         <Col>
                             <Button
                                 onClick={() => {
-                                    if (interval) {
-                                        return;
-                                    }
                                     const canvas: any = canvasRef.current;
                                     const ctx: any = canvas.getContext('2d');
                                     interval = setInterval(() => {

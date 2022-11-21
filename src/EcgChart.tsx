@@ -11,10 +11,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button } from "react-bootstrap";
 
 
-const ContainerCanvas = styled.div`
-    border: 1px solid black;
-`;
-
 
 
 export interface EcgChartProps {
@@ -31,7 +27,7 @@ export default function EcgChart(props: EcgChartProps) {
     const data: number[] = [];
 
     // TESTING: fill data with some test values
-    for (var i = 0; i < 5000; i++) {
+    for (var i = 0; i < 500; i++) {
         data.push(Math.sin(i / 10) * 70 + 100);
     }
 
@@ -86,32 +82,41 @@ export default function EcgChart(props: EcgChartProps) {
 
     return (<Container key={uuidv4()}>
         <Row>
-            <ContainerCanvas>
-                <canvas style={{ background: "white" }} width={window.innerWidth - 10} height={props.height} id={canvasId} key={canvasId} ref={canvasRef} />
-            </ContainerCanvas>
+            <Col>
+                <canvas style={{ background: "white", border: "solid 1px black" }} width={props.width} height={props.height} id={canvasId} key={canvasId} ref={canvasRef} />
+            </Col>
         </Row>
-        <Row style={{ paddingTop: 20 }}>
+        <Row>
+            <Col>
+                <Container style={{ width: props.width }}>
+                    <Row>
+                        <Col>
+                            <Button
+                                onClick={() => {
+                                    clearInterval(interval);
+                                    interval = null;
+                                }}>Stop</Button>
+                        </Col>
+                        <Col>
+                            <Button
+                                onClick={() => {
+                                    if (interval) {
+                                        return;
+                                    }
+                                    const canvas: any = canvasRef.current;
+                                    const ctx: any = canvas.getContext('2d');
+                                    interval = setInterval(() => {
+                                        animate(canvas, ctx);
+                                    }, 100);
+                                }}>Start</Button>
+                        </Col>
+                    </Row>
 
-            <Col>
-                <Button
-                    onClick={() => {
-                        clearInterval(interval);
-                        interval = null;
-                    }}>Stop</Button>
+                </Container>
             </Col>
-            <Col>
-                <Button
-                    onClick={() => {
-                        if (interval) {
-                            return;
-                        }
-                        const canvas: any = canvasRef.current;
-                        const ctx: any = canvas.getContext('2d');
-                        interval = setInterval(() => {
-                            animate(canvas, ctx);
-                        }, 100);
-                    }}>Start</Button>
-            </Col>
+
+
+
         </Row>
 
     </Container>)

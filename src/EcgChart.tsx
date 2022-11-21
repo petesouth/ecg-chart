@@ -87,7 +87,7 @@ export default function EcgChart(props: EcgChartProps) {
         </Row>
         <Row>
             <Col>
-                <Container style={{ width: props.width }}>
+                <Container style={{ width: props.width, padding: 20 }}>
                     <Row>
                         <Col>
                             <Button
